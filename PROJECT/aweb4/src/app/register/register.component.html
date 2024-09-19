@@ -1,0 +1,56 @@
+<div class="register-container">
+    <h2>Register</h2>
+    <form [formGroup]="registerForm" (ngSubmit)="register()" class="register-form">
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input
+          id="username"
+          formControlName="username"
+          type="text"
+          [class.invalid]="isInvalid('username')"
+          placeholder="Enter your username"
+        />
+        <div *ngIf="isInvalid('username')" class="error-message">
+          Username must be at least 3 characters long.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input
+          id="password"
+          formControlName="password"
+          type="password"
+          [class.invalid]="isInvalid('password')"
+          placeholder="Enter your password"
+        />
+        <div *ngIf="isInvalid('password')" class="error-message">
+          Password must be at least 6 characters long.
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password:</label>
+        <input
+          id="confirmPassword"
+          formControlName="confirmPassword"
+          type="password"
+          [class.invalid]="isInvalid('confirmPassword')"
+          placeholder="Confirm your password"
+        />
+        <div *ngIf="isInvalid('confirmPassword')" class="error-message">
+          Please confirm your password.
+        </div>
+      </div>
+  
+      <button type="submit" class="register-btn" [disabled]="registerForm.invalid">
+        Register
+      </button>
+  
+      <p>Already have an account? <a routerLink="/login" routerLinkActive="active">Login here</a></p>
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+    </form>
+  </div>
+  

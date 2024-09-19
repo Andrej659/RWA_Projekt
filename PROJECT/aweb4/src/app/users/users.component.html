@@ -1,0 +1,12 @@
+<div class="user-list-container">
+    <h2>Users</h2>
+    <ul class="user-list">
+      <li *ngFor="let user of users" class="user-item">
+        <a [routerLink]="['/posts', user]" class="user-title">{{ user }}</a>
+        <div class="user-actions">
+          <a [routerLink]="['/posts', user]" class="edit-btn">See user posts</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+  
