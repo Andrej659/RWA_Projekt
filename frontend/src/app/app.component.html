@@ -1,0 +1,25 @@
+<nav>
+  <ul class="nav">
+    <li>
+      <a routerLink="/users" routerLinkActive="active">All Users</a>
+    </li>
+    <li>
+      <a [routerLink]="['/posts', user]" *ngIf="isAuthenticated" routerLinkActive="active">My Blog Posts</a>
+    </li>
+    <li>
+      <a [routerLink]="['/posts', user, 'create']" *ngIf="isAuthenticated" routerLinkActive="active">Create Post</a>
+    </li>
+    <li>
+      <a routerLink="/login" *ngIf="!isAuthenticated" routerLinkActive="active">Login</a>
+    </li>
+    <li>
+      <a routerLink="/register" *ngIf="!isAuthenticated" routerLinkActive="active">Register</a>
+    </li>
+    <li>
+      <a (click)="logout()" *ngIf="isAuthenticated">Logout</a>
+    </li>
+  </ul>
+</nav>
+
+<!-- Dynamic component loading based on routes -->
+<router-outlet></router-outlet>

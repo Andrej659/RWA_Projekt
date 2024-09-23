@@ -1,0 +1,16 @@
+<div class="blog-list-container">
+    <h2>Blog Posts</h2>
+    <ul class="post-list">
+      <li *ngFor="let post of posts" class="post-item">
+        <a [routerLink]="['/posts', username, post.id]" class="post-title">{{ post.title }}</a>
+        <div class="post-actions" *ngIf="buttonsVisible">
+          <button (click)="deletePost(post.id)" class="delete-btn">Delete</button>
+          <a [routerLink]="['/posts', username, post.id, 'edit']" class="edit-btn">Edit</a>
+        </div>
+      </li>
+    </ul>
+    <div class="create-new">
+      <a [routerLink]="['/posts', username, 'create']" *ngIf="buttonsVisible" class="create-btn">Create New Post</a>
+    </div>
+  </div>
+  
