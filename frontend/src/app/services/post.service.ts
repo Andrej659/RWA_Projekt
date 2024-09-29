@@ -2,11 +2,21 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-export interface Post {
-  id: number;
+
+export class Post {
+  postId: number;
   title: string;
+  autorId : number;
+  lajkovi : number;
   content: string;
-  author: string;
+  
+  constructor(postId: number, title: string, autorId : number, lajkovi : number, content: string) {
+    this.postId = postId;
+    this.title = title;
+    this.autorId = autorId;
+    this.lajkovi = lajkovi;
+    this.content = content;
+  }
 }
 
 @Injectable({
@@ -17,9 +27,9 @@ export class PostService {
 
   constructor(private http: HttpClient) {}
 
-  createPost(title: string, content: string, author: string): Observable<any> {
-    const payload = { title, content, author };
-    return this.http.post(`${this.apiUrl}/${author}/create`, payload);
+  createPost(autorId : number, title: string, content: string): Observable<any> {
+    const payload = { autorId, title, content };
+    return this.http.post(`${this.apiUrl}/${autorId}/create`, payload);
   }
 
   getAllPosts(): Observable<any> {

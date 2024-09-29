@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { User, UserService } from '../auth/user.service';
+import { User, UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-users',

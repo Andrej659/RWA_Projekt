@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { PostService, Post } from '../../auth/post.service';
+import { PostService, Post } from '../../services/post.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -17,10 +17,10 @@ export class CreatePostComponent {
 
   constructor(private postService: PostService, private router: Router, private route: ActivatedRoute) {}
 
-  createPost() {
-    let username = this.route.snapshot.paramMap.get('username');
-    this.postService.createPost(this.title, this.content, username || 'Anonymous').subscribe(
-      res => this.router.navigate(['/posts', username])
-    );
-  }
+    createPost() {
+      let autorId = this.route.snapshot.paramMap.get('autorId') ? parseInt(this.route.snapshot.paramMap.get('autorId')!) : 0;
+      this.postService.createPost( autorId, this.title, this.content ).subscribe(
+        res => this.router.navigate(['/posts', autorId])
+      );
+    }
 }

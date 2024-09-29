@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
-import { UserService } from './auth/user.service';
+import { UserService } from './services/user.service';
 import { CommonModule } from '@angular/common';  // Import common directives (e.g., *ngIf, *ngFor)
 
 @Component({

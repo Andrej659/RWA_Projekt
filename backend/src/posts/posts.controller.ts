@@ -6,7 +6,7 @@ import { BlogPost } from './posts.entity';
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
-  @Post(':username/create')
+  @Post(':autorId/create')
   createPost(@Body() body: { autorId: number; title: string; content: string; }) {
     return this.postsService.createPost(body.autorId, body.title, body.content);
   }
