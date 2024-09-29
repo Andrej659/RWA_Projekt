@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { PostService, Post } from '../../services/post.service';
+import { PostService, BlogPost } from '../../services/post.service';
 
 @Component({
   selector: 'app-post-detail',
@@ -9,16 +9,16 @@ import { PostService, Post } from '../../services/post.service';
   standalone: true,  // Declare this component as standalone
 })
 export class PostDetailComponent implements OnInit {
-  post: Post | undefined;
-
+  post: BlogPost | undefined;
+  username : string = "";
   constructor(private postService: PostService, private route: ActivatedRoute) {}
 
   ngOnInit() {
-    const username = this.route.snapshot.paramMap.get('username')!;
+    this.username = this.route.snapshot.paramMap.get('username')!;
     const id = +this.route.snapshot.paramMap.get('id')!;
-    this.postService.getPost(id, username).subscribe(
+    this.postService.getPost(id, this.username).subscribe(
       (res) => {
-        this.post = res as Post;
+        this.post = res as BlogPost;
       }
     );
   }

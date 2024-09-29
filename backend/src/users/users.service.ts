@@ -31,4 +31,13 @@ export class UsersService {
       await this.usersRepository.delete({ username });  // Brišemo korisnika
     }
   }
+
+  async login(username: string, password: string): Promise<boolean> {
+    const newUser =  await this.findByUsername(username);
+    if (newUser && await bcrypt.compare(password, newUser.password)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

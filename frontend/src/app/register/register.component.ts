@@ -30,13 +30,12 @@ export class RegisterComponent {
       const username = this.registerForm.get('username')?.value;
       const password = this.registerForm.get('password')?.value;
       const confirmPassword = this.registerForm.get('confirmPassword')?.value;
-
+      
       if (password === confirmPassword) {
         this.userService.register(username, password).subscribe(
           (res) => {
             if (res) {
-              this.userService.setLoggedInUser(username);
-              this.router.navigate(['/posts', username]);
+              this.router.navigate(['/login']);
             } else {
               this.errorMessage = 'User already exists!';
             }

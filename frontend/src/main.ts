@@ -19,7 +19,7 @@ const routes: Routes = [
   { path: 'posts/:username/create', component: CreatePostComponent},
   { path: 'posts/:username/:id', component: PostDetailComponent },
   { path: 'posts/:username/:id/edit', component: EditPostComponent},
-  { path: '', redirectTo: '/users', pathMatch: 'full' },
+  { path: '', redirectTo: '/register', pathMatch: 'full' },
 ];
 
 bootstrapApplication(AppComponent, {

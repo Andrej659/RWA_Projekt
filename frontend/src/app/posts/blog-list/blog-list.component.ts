@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PostService, Post } from '../../services/post.service';
+import { PostService, BlogPost } from '../../services/post.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute } from '@angular/router';
@@ -14,7 +14,7 @@ import { UserService } from '../../services/user.service';
   imports: [CommonModule, FormsModule, RouterModule],
 })
 export class BlogListComponent implements OnInit{
-  posts: Post[] = [];
+  posts: BlogPost[] = [];
   buttonsVisible: boolean = true;
   username: string | null = "";
   
@@ -26,13 +26,13 @@ export class BlogListComponent implements OnInit{
     if(this.username) {
       this.postService.getUserPosts(this.username).subscribe(
         (res) => {
-          this.posts = res as Post[];
+          this.posts = res as BlogPost[];
         }
       );
     } else {
       this.postService.getAllPosts().subscribe(
         (res) => {
-          this.posts = res as Post[];
+          this.posts = res as BlogPost[];
         }
       );;
     }
@@ -40,7 +40,7 @@ export class BlogListComponent implements OnInit{
 
   deletePost(id: number) {
     this.postService.deletePost(id).subscribe(
-      res => this.posts = this.posts.filter(obj => obj.id != id)
+      res => this.posts = this.posts.filter(obj => obj.postId != id)
     );
   }
 }

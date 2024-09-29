@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 
-export class Post {
+export class BlogPost {
   postId: number;
   title: string;
   autorId : number;
@@ -27,9 +27,9 @@ export class PostService {
 
   constructor(private http: HttpClient) {}
 
-  createPost(autorId : number, title: string, content: string): Observable<any> {
-    const payload = { autorId, title, content };
-    return this.http.post(`${this.apiUrl}/${autorId}/create`, payload);
+  createPost(username : string, title: string, content: string): Observable<any> {
+    const payload = { username, title, content };
+    return this.http.post(`${this.apiUrl}/${username}/create`, payload);
   }
 
   getAllPosts(): Observable<any> {
@@ -44,9 +44,9 @@ export class PostService {
     return this.http.get(`${this.apiUrl}/${username}/${postId}`)
   }
 
-  updatePost(postId: number, title: string, content: string, author: string): Observable<any> {
+  updatePost(postId: number, title: string, content: string, username: string): Observable<any> {
     const payload = { title, content };
-    return this.http.patch(`${this.apiUrl}/${author}/${postId}/edit`, payload);
+    return this.http.put(`${this.apiUrl}/${username}/${postId}/edit`, payload);
   }
 
   deletePost(postId: number): Observable<any> {

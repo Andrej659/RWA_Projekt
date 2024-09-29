@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PostService, Post } from '../../services/post.service';
+import { PostService, BlogPost } from '../../services/post.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
@@ -14,23 +14,23 @@ import { UserService } from '../../services/user.service';
   imports: [CommonModule, FormsModule],
 })
 export class EditPostComponent implements OnInit {
-  post: Post | undefined;
-
+  post: BlogPost | undefined;
+  username: string = '';
   constructor(private postService: PostService, private route: ActivatedRoute, private router: Router, private userService: UserService ) {}
 
   ngOnInit() {
     const id = +this.route.snapshot.paramMap.get('id')!;
-    const username = this.route.snapshot.paramMap.get('username')!;
-    this.postService.getPost(id, username).subscribe(
+    this.username = this.route.snapshot.paramMap.get('username')!;
+    this.postService.getPost(id, this.username).subscribe(
       (res) => {
-        this.post = res as Post;
+        this.post = res as BlogPost;
       }
     );
   }
 
   editPost() {
     if (this.post) {
-      this.postService.updatePost(this.post.id, this.post.title, this.post.content, this.post.author).subscribe(
+      this.postService.updatePost(this.post.postId, this.post.title, this.post.content, this.username).subscribe(
         res => this.router.navigate(['/posts', this.userService.getLoggedInUser()])
       );
       

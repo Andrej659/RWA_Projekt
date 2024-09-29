@@ -6,9 +6,9 @@ import { BlogPost } from './posts.entity';
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
-  @Post(':autorId/create')
-  createPost(@Body() body: { autorId: number; title: string; content: string; }) {
-    return this.postsService.createPost(body.autorId, body.title, body.content);
+  @Post(':username/create')
+  createPost(@Body() body: { username: string; title: string; content: string; }) {
+    return this.postsService.createPost(body.username, body.title, body.content);
   }
 
   @Get()
@@ -16,17 +16,22 @@ export class PostsController {
     return this.postsService.findAllPosts();
   }
 
-  @Get('user/:autorId')
-  getPostsByUserId(@Param('autorId') autorId: number): Promise<BlogPost[]> {
-    return this.postsService.findPostsByUser(autorId);
+  @Get(':username/:postId')
+  getPost(@Param('username') username: string, @Param('postId') postId: number): Promise<BlogPost> {
+    return this.postsService.getPost(username, postId);
+  }
+  @Get(':username')
+  getPostsByUserId(@Param('username') username: string): Promise<BlogPost[]> {
+    return this.postsService.findPostsByUser(username);
   }
 
-  @Put(':postId')
+  @Put(':username/:postId/edit')
   updatePost(
     @Param('postId') postId: number,   // Preuzimanje postId iz URL parametra
+    @Body('title') title: string,
     @Body('content') content: string   // Novi sadržaj posta iz tela zahteva
   ): Promise<BlogPost> {
-    return this.postsService.updatePost(postId, content);
+    return this.postsService.updatePost(postId, title, content);
   }
 
   @Delete(':postId')

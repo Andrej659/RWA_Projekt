@@ -25,7 +25,7 @@ export class LoginComponent {
       (res) => {
         if (res) {
           this.userService.setLoggedInUser(this.username);
-          this.router.navigate(['/posts', this.username]);
+          this.router.navigate(['/posts']);
         } else {
           this.errorMessage = 'Invalid username or password';
         }
