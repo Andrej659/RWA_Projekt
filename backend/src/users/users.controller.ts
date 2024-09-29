@@ -9,19 +9,4 @@ export class UsersController {
   register(@Body() body: { username: string, password: string }) {
     return this.usersService.register(body.username, body.password);
   }
-
-  @Post('login')
-  login(@Body() body: { username: string, password: string }) {
-    return this.usersService.login(body.username, body.password);
-  }
-
-  @Get('logout')
-  logout() {
-    return this.usersService.logout();
-  }
-
-  @Get()
-  getUsers() {
-    return this.usersService.getUsers();
-  }
 }

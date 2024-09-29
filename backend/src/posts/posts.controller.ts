@@ -1,47 +1,41 @@
-import { Controller, Post, Get, Delete, Body, Param, Patch } from '@nestjs/common';
+import { Controller, Post, Get, Delete, Body, Param, Put } from '@nestjs/common';
 import { PostsService } from './posts.service';
+import { BlogPost } from './posts.entity';
 
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Post(':username/create')
-  createPost(@Body() body: { title: string, content: string, author: string }) {
-    return this.postsService.addPost(body.title, body.content, body.author);
+  createPost(@Body() body: { autorId: number; title: string; content: string; }) {
+    return this.postsService.createPost(body.autorId, body.title, body.content);
   }
 
   @Get()
-  getPosts() {
-    return this.postsService.getPosts();
+  getAllPosts(): Promise<BlogPost[]> {
+    return this.postsService.findAllPosts();
   }
 
-  @Get(':username')
-  getUserPosts(@Param('username') username: string) {
-    var temp = this.postsService.getUserPosts(username);
-    return temp;
+  @Get('user/:autorId')
+  getPostsByUserId(@Param('autorId') autorId: number): Promise<BlogPost[]> {
+    return this.postsService.findPostsByUser(autorId);
   }
 
-  @Get(':username/:id')
-  getPost(@Param('id') postId: number) {
-    var temp = this.postsService.getPost(postId);
-    return temp;
-  }
-
-  @Patch(':username/:id/edit')
+  @Put(':postId')
   updatePost(
-        @Param('username') username: string,
-        @Param('id') postId: number,
-        @Body() body: { title: string, content: string}) {
-    return this.postsService.editPost({
-        id: postId,
-        title: body.title,
-        content: body.content,
-        author: username || 'Anonymous',
-    });
+    @Param('postId') postId: number,   // Preuzimanje postId iz URL parametra
+    @Body('content') content: string   // Novi sadržaj posta iz tela zahteva
+  ): Promise<BlogPost> {
+    return this.postsService.updatePost(postId, content);
   }
 
-  @Delete(':id')
-  deletePost(@Param('id') postId: number) {
+  @Delete(':postId')
+  deletePost(@Param('postId') postId: number): Promise<void> {
     return this.postsService.deletePost(postId);
+  }
+
+  @Post(':postId/like')
+  addLike(@Param('postId') postId: number): Promise<BlogPost> {
+    return this.postsService.addLike(postId);
   }
 }

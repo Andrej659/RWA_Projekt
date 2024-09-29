@@ -1,45 +1,50 @@
+import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
-
-export interface Post {
-  id: number;
-  title: string;
-  content: string;
-  author: string;
-}
+import { Repository } from 'typeorm';
+import { BlogPost } from './posts.entity';
 
 @Injectable()
 export class PostsService {
-  private posts: Post[] = [];
 
-  constructor() {}
+  constructor(
+    @InjectRepository(BlogPost)
+    private postsRepository: Repository<BlogPost>,
+  ) {}
 
-  getPosts(): Post[] {
-    return this.posts;
+async createPost(autorId: number, title: string, content: string): Promise<BlogPost> {
+  const newPost = this.postsRepository.create({ autorId, title, content });
+  return this.postsRepository.save(newPost);
+}
+
+async deletePost(postId: number): Promise<void> {
+  await this.postsRepository.delete(postId);
+}
+
+// Metoda za editovanje (izmenu) posta
+async updatePost(postId: number, content: string): Promise<BlogPost> {
+  const post = await this.postsRepository.findOne({ where: { postId } });
+  if (post) {
+    post.content = content;
+    return this.postsRepository.save(post);  // Čuvanje ažuriranog posta
   }
+  throw new Error('Post not found');
+}
 
-  getUserPosts(username: String): Post[] {
-    return this.posts.filter(post => post.author == username);
-  }
+async findAllPosts(): Promise<BlogPost[]> {
+  return this.postsRepository.find();  // Vraćamo sve postove
+}
 
-  getPost(id: number): Post | undefined {
-    return this.posts.find(post => post.id == id);
-  }
+async findPostsByUser(autorId: number): Promise<BlogPost[]> {
+  return this.postsRepository.find({ where: { autorId } });
+}
 
-  addPost(title: string, content: string, username: string): void {
-    const newPost: Post = {
-        id: new Date().getTime(),
-        title: title,
-        content: content,
-        author: username || 'Anonymous',
-      };
-    this.posts.push(newPost);
+// (Ovo je dodatna metoda) - Metoda za dodavanje lajkova postu
+async addLike(postId: number): Promise<BlogPost> {
+  const post = await this.postsRepository.findOne({ where: { postId } });
+  if (post) {
+    post.lajkovi += 1;
+    return this.postsRepository.save(post);  // Čuvanje ažuriranog posta
   }
-
-  editPost(updatedPost: Post): void {
-    this.posts = this.posts.map(post => (post.id == updatedPost.id ? updatedPost : post));
-  }
-
-  deletePost(id: number): void {
-    this.posts = this.posts.filter(post => post.id != id);
-  }
+  throw new Error('Post not found');
+}
 }
