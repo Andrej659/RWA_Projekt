@@ -11,6 +11,11 @@ import { DataSource } from 'typeorm';
 import { BlogPost } from './posts/posts.entity';
 import { User } from './users/users.entity';
 import { PostsService } from './posts/posts.service';
+import { AuthModule } from './auth/auth.module';
+import { AuthController } from './auth/auth.controller';
+import { AuthService } from './auth/auth.service';
+import { JwtStrategy } from './auth/jwt.strategy';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -25,7 +30,8 @@ import { PostsService } from './posts/posts.service';
       synchronize: true,
     }),
     PostsModule,
-    UsersModule
+    UsersModule,
+    AuthModule
   ],
   controllers: [AppController, PostsController, UsersController],
   providers: [AppService, PostsService, UsersService],

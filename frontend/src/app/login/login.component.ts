@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from '../app.component';
 import { UserService } from '../services/user.service';
+import { AuthService } from '../../auth.service';
 
 
 @Component({
@@ -18,18 +19,17 @@ export class LoginComponent {
   password: string = '';
   errorMessage: string | null = null;
 
-  constructor(private router: Router, private app: AppComponent, private userService: UserService) {}
+  constructor(private router: Router, private app: AppComponent, private userService: UserService, private authService: AuthService) {}
 
-  login() {
-    this.userService.login(this.username, this.password).subscribe(
-      (res) => {
-        if (res) {
-          this.userService.setLoggedInUser(this.username);
-          this.router.navigate(['/posts']);
-        } else {
-          this.errorMessage = 'Invalid username or password';
+        login() {
+          this.authService.login(this.username, this.password).subscribe(res=> {
+            if (res && typeof res === 'object' && 'access_token' in res) {
+              const token = res.access_token as string;
+              localStorage.setItem('access_token', token);
+              this.router.navigate(['/posts']);
+            } else {
+              this.errorMessage = 'Invalid credentials!';
+            }
+          });
         }
-      }
-    );
-  }
 }

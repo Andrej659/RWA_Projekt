@@ -7,13 +7,11 @@ import { CreatePostComponent } from './app/posts/create-post/create-post.compone
 import { PostDetailComponent } from './app/posts/post-detail/post-detail.component';
 import { EditPostComponent } from './app/posts/edit-post/edit-post.component';
 import { RegisterComponent } from './app/register/register.component';
-import { UsersComponent } from './app/users/users.component';
 import { provideHttpClient } from '@angular/common/http';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'users', component: UsersComponent },
   { path: 'posts', component: BlogListComponent },
   { path: 'posts/:username', component: BlogListComponent },
   { path: 'posts/:username/create', component: CreatePostComponent},
