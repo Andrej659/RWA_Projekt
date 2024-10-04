@@ -39,9 +39,18 @@ async findAllPosts(): Promise<BlogPost[]> {
   return this.postsRepository.find();  // Vraćamo sve postove
 }
 
-async findPostsByUser(username : string): Promise<BlogPost[]> {
-  const autor = await this.usersRepository.findOne({ where: { username } });
-  return this.postsRepository.find({ where: { autorId: autor.id } });
+async findIdByUsername(username: string): Promise<number> {
+  const user = await this.usersRepository.findOne({ where: { username: username } });
+  if (user) {
+    return user.id; // Pretpostavljamo da korisnik ima polje id
+  }
+  throw new Error(`User with username ${username} not found`);
+}
+
+
+async findPostsByUserId(username: string): Promise<BlogPost[]> {
+  const userId = await this.findIdByUsername(username);
+  return this.postsRepository.find({ where: { autorId: userId } });
 }
 
 // (Ovo je dodatna metoda) - Metoda za dodavanje lajkova postu
@@ -53,6 +62,20 @@ async addLike(postId: number): Promise<BlogPost> {
   }
   throw new Error('Post not found');
 }
+
+async getSinglePost(postId : number): Promise<any> {
+  const post = await this.postsRepository.findOne({ where: { postId } });
+  const usnm = await this.getAutorsName(post.autorId);
+  return {username: usnm, post: post};
+}
+
+  async getAutorsName(autorId : number): Promise<string> {
+    const user = await this.usersRepository.findOne({ where: { id: autorId } });
+    if (user) {
+      return user.username; 
+    }
+    throw new Error(`User with id ${autorId} not found`);
+  }
 
 async getPost(username: string, postId : number): Promise<BlogPost> {
   const autor = await this.usersRepository.findOne({ where: { username } });

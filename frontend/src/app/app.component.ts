@@ -1,30 +1,27 @@
 import { Component } from '@angular/core';
-import { RouterModule, Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from './services/user.service';
-import { CommonModule } from '@angular/common';  // Import common directives (e.g., *ngIf, *ngFor)
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  standalone: true,  // Declare this as a standalone component
-  imports: [RouterModule, CommonModule],  // Import RouterModule for routing & CommonModule for directives
 })
 export class AppComponent {
-  user: String | null = "";
+  username : string = '';
 
-  constructor(public userService: UserService, private router: Router, private route: ActivatedRoute) {
+  constructor(public userService: UserService, private router: Router, private route: ActivatedRoute, public authService: AuthService) {
     router.events.subscribe(val => {
-      this.user = userService.getLoggedInUser();
+      this.username = userService.getUsernameFromToken() || '';
     });
   }
 
-  get isAuthenticated(): boolean {
-    return this.userService.getLoggedInUser() != null;
-  }
 
   logout() {
-    this.userService.logout();
+    console.log('Logging out...');
+    localStorage.removeItem('access_token');
+    console.log('Access token removed:', !localStorage.getItem('access_token'));
     this.router.navigate(['/login']);
   }
 }

@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Delete, Body, Param, Put, UseGuards } from '@nestjs/common';
+import { Controller, Post, Get, Delete, Body, Param, Put, UseGuards, Request } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { BlogPost } from './posts.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -9,32 +9,42 @@ export class PostsController {
 
   @UseGuards(JwtAuthGuard)
   @Post(':username/create')
-  createPost(@Body() body: { username: string; title: string; content: string; }) {
-    return this.postsService.createPost(body.username, body.title, body.content);
+  async createPost(@Body() body: { title: string; content: string; }, @Request() req) {
+    const username = req.user.username;
+    return this.postsService.createPost(username, body.title, body.content);
   }
 
 
   @Get()
-  getAllPosts(): Promise<BlogPost[]> {
+  async getAllPosts(): Promise<BlogPost[]> {
     return this.postsService.findAllPosts();
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('posts/:postId')
+  async getPost(@Param('postId') postId: number, @Request() req): Promise<any> {
+    return this.postsService.getSinglePost(postId);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get(':username/:postId')
-  getPost(@Param('username') username: string, @Param('postId') postId: number): Promise<BlogPost> {
+  async getPostOfUser(@Param('postId') postId: number, @Request() req): Promise<BlogPost> {
+    const username = req.user.username;
     return this.postsService.getPost(username, postId);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get(':username')
-  getPostsByUserId(@Param('username') username: string): Promise<BlogPost[]> {
-    return this.postsService.findPostsByUser(username);
+  async getUserPosts(@Request() req) {
+    const username = req.user.username; // ili req.user.sub, ovisno o payload-u
+    console.log(username + " is authenticated");
+    return this.postsService.findPostsByUserId(username); // Metoda za dohvatanje postova od korisnika
   }
 
 
   @UseGuards(JwtAuthGuard)
   @Put(':username/:postId/edit')
-  updatePost(
+  async updatePost(
     @Param('postId') postId: number,   // Preuzimanje postId iz URL parametra
     @Body('title') title: string,
     @Body('content') content: string   // Novi sadržaj posta iz tela zahteva
@@ -49,9 +59,9 @@ export class PostsController {
     return this.postsService.deletePost(postId);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Post(':postId/like')
+  @Post('posts/:postId/like')
   addLike(@Param('postId') postId: number): Promise<BlogPost> {
+    console.log('Liked post'+ postId);  // Debugging logiranje
     return this.postsService.addLike(postId);
   }
 }

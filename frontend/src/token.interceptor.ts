@@ -3,11 +3,12 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/c
 import { Observable } from 'rxjs';
 
 @Injectable()
+
 export class JwtInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // Pretpostavimo da čuvaš JWT token u localStorage
     const token = localStorage.getItem('access_token');
-
+    
     if (token) {
       // Dodaj Authorization zaglavlje ako postoji token
       request = request.clone({

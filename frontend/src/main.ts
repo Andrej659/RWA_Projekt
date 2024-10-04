@@ -1,28 +1,5 @@
-import { bootstrapApplication } from '@angular/platform-browser';
-import { provideRouter, Routes } from '@angular/router';
-import { AppComponent } from './app/app.component';
-import { LoginComponent } from './app/login/login.component';
-import { BlogListComponent } from './app/posts/blog-list/blog-list.component';
-import { CreatePostComponent } from './app/posts/create-post/create-post.component';
-import { PostDetailComponent } from './app/posts/post-detail/post-detail.component';
-import { EditPostComponent } from './app/posts/edit-post/edit-post.component';
-import { RegisterComponent } from './app/register/register.component';
-import { provideHttpClient } from '@angular/common/http';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { AppModule } from './app/app.module'; // Uvjeri se da je ovdje pravi modul
 
-const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'posts', component: BlogListComponent },
-  { path: 'posts/:username', component: BlogListComponent },
-  { path: 'posts/:username/create', component: CreatePostComponent},
-  { path: 'posts/:username/:id', component: PostDetailComponent },
-  { path: 'posts/:username/:id/edit', component: EditPostComponent},
-  { path: '', redirectTo: '/register', pathMatch: 'full' },
-];
-
-bootstrapApplication(AppComponent, {
-  providers: [
-    provideRouter(routes),  // Provide the routes here
-    provideHttpClient(),
-  ]
-}).catch((err) => console.error(err));
+platformBrowserDynamic().bootstrapModule(AppModule) // Ovdje bootstrapuješ modul
+  .catch(err => console.error(err));

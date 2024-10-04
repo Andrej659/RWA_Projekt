@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { jwtDecode } from 'jwt-decode';
 
 export interface User {
   password: string;
@@ -10,10 +11,12 @@ export interface User {
 @Injectable({
   providedIn: 'root'
 })
+
 export class UserService {
   private apiUrl = 'http://localhost:3000/users';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   register(username: string, password: string): Observable<any> {
     const payload = { username, password };
@@ -26,19 +29,22 @@ export class UserService {
   }
 
   logout(): void {
-    localStorage.removeItem('username');
+    localStorage.removeItem('access_token');
     this.http.get(`${this.apiUrl}/logout`);
   }
 
-  getUsers(): Observable<any> {
-    return this.http.get(`${this.apiUrl}`);
+  getAuthorUsername(autorID : number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/autorName/${autorID}`)
   }
 
-  setLoggedInUser(username: string) {
-    localStorage.setItem('username', username);
-  }
 
-  getLoggedInUser() {
-    return localStorage.getItem('username');
-}
+  getUsernameFromToken(): string | null {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      const decodedToken: any = jwtDecode(token);
+      let username: string = decodedToken.username;
+      return username;
+    }
+    return null;
+  }
 }

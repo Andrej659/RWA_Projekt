@@ -1,22 +1,21 @@
 <nav>
   <ul class="nav">
     <li>
-      <a routerLink="/posts" routerLinkActive="active">All posts</a>
+      <a routerLink="/posts" routerLinkActive="active" *ngIf="authService.isLoggedIn()">All posts</a>
     </li>
     <li>
-      <a [routerLink]="['/posts', user]" *ngIf="isAuthenticated" routerLinkActive="active">My Blog Posts</a>
+      <a [routerLink]="['/posts', username]"  routerLinkActive="active" *ngIf="authService.isLoggedIn()">My Blog Posts</a>
     </li>
     <li>
-      <a [routerLink]="['/posts', user, 'create']" *ngIf="isAuthenticated" routerLinkActive="active">Create Post</a>
+      <a [routerLink]="['/posts', username, 'create']"  routerLinkActive="active" *ngIf="authService.isLoggedIn()">Create Post</a>
     </li>
     <li>
-      <a routerLink="/login" *ngIf="!isAuthenticated" routerLinkActive="active">Login</a>
+      <a routerLink="/login" routerLinkActive="active" *ngIf="!authService.isLoggedIn()">Login</a>
+    <li>
+      <a routerLink="/register" routerLinkActive="active" *ngIf="!authService.isLoggedIn()">Register</a>
     </li>
     <li>
-      <a routerLink="/register" *ngIf="!isAuthenticated" routerLinkActive="active">Register</a>
-    </li>
-    <li>
-      <a (click)="logout()" *ngIf="isAuthenticated">Logout</a>
+      <a (click)="logout()" *ngIf="authService.isLoggedIn()">Logout</a>
     </li>
   </ul>
 </nav>

@@ -19,6 +19,12 @@ export class UsersController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Request() req) {
-    return this.authService.login(req.user); // Nakon prijave, vraća JWT token
+    return this.authService.login(req.user);
+  }
+
+  @Get('/autorName/:autorId')
+  async getAuthorName(@Param('autorId') autorId: number, @Request() req): Promise<string> {
+    console.log(this.usersService.getAutorsName(autorId));
+    return this.usersService.getAutorsName(autorId); // Assuming getAuthorName is a method in PostsService
   }
 }

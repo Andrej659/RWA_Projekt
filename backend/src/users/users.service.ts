@@ -40,4 +40,13 @@ export class UsersService {
       return false;
     }
   }
+
+  async getAutorsName(autorId : number): Promise<string> {
+    const user = await this.usersRepository.findOne({ where: { id: autorId } });
+    if (user) {
+      return user.username; // Assuming 'username' is a property of User entity
+    }
+    throw new Error(`User with id ${autorId} not found`);
+  }
+
 }

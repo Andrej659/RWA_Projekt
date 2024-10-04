@@ -11,8 +11,6 @@ import { AuthService } from '../../auth.service';
     selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.css'],
-    standalone: true,  // Declare this component as standalone
-    imports: [CommonModule, FormsModule, RouterModule],  // Import necessary modules (CommonModule and FormsModule)
   })
 export class LoginComponent {
   username: string = '';
@@ -26,7 +24,7 @@ export class LoginComponent {
             if (res && typeof res === 'object' && 'access_token' in res) {
               const token = res.access_token as string;
               localStorage.setItem('access_token', token);
-              this.router.navigate(['/posts']);
+              this.router.navigate([`/posts/${this.username}`]);
             } else {
               this.errorMessage = 'Invalid credentials!';
             }

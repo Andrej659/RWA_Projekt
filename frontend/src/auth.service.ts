@@ -9,14 +9,11 @@ export class AuthService {
   private readonly TOKEN_KEY = 'access_token';
   private apiUrl = 'http://localhost:3000/auth';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   login(username: string, password: string) {
     return this.http.post(`${this.apiUrl}/login`, { username, password });
-  }
-
-  logout() {
-    localStorage.removeItem(this.TOKEN_KEY);
   }
 
   getToken() {

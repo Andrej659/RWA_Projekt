@@ -1,6 +1,8 @@
 <div class="post-detail-container">
-    <h2>{{ post?.title }}</h2>
-    <p>{{ post?.content }}</p>
-    <small>By: {{ username }}</small>
-  </div>
-  
+  <h2>{{ post?.title }}</h2>
+  <p>{{ post?.content }}</p>
+  <small>By: {{ username }}</small>
+  <p>Created at: {{ post?.vrijeme_stvaranja | date:'medium' }}</p> <!-- Pretpostavljamo da postoji atribut createdAt -->
+  <p>Likes: {{ post?.lajkovi }}</p> <!-- Pretpostavljamo da postoji atribut likes -->
+  <button (click)="likePost()" class="like-button">Like</button>
+</div>
